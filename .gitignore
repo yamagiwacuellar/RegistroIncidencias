@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+app/build/
+
+# Local configuration file (contiene la ruta al SDK de tu máquina)
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Log/OS
+*.log
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystores (no subir claves de firma)
+*.jks
+*.keystore
+!debug.keystore

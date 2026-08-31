@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="azul_primario">#1B3A6B</color>
+    <color name="azul_oscuro">#122747</color>
+    <color name="azul_claro">#E8EEF7</color>
+    <color name="acento_ambar">#F2A63B</color>
+    <color name="gris_texto">#3C4757</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="fondo">#F4F6FA</color>
+
+    <color name="prioridad_baja">#2E7D32</color>
+    <color name="prioridad_media">#EF6C00</color>
+    <color name="prioridad_alta">#C62828</color>
+</resources>
