@@ -89,11 +89,29 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Campo de estado 1: titulo de la incidencia -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutTitulo"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_titulo">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo de estado 2: descripcion de la incidencia -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutDescripcion"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:hint="@string/hint_descripcion">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -140,6 +158,18 @@
                     android:textColor="@color/azul_primario"
                     app:cornerRadius="12dp"
                     app:strokeColor="@color/azul_primario" />
+
+                <!-- Retroalimentacion inmediata (estado basico) -->
+                <TextView
+                    android:id="@+id/txtMensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    tools:text="Aún no hay reporte creado" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

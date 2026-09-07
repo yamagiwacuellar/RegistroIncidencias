@@ -17,9 +17,11 @@ import java.util.Locale
 /**
  * Pantalla principal de la aplicacion "Registro de Incidencias".
  *
- * Permite escribir la descripcion de una incidencia, asignarle una prioridad
- * y registrarla en una lista en memoria. Muestra ademas un contador con el
- * total de incidencias registradas durante la sesion.
+ * Permite escribir el titulo y la descripcion de una incidencia, asignarle
+ * una prioridad y registrarla en una lista en memoria. Al registrar, la
+ * pantalla reacciona de inmediato mostrando un mensaje de retroalimentacion
+ * ("Reporte preparado: <titulo>"), ademas de actualizar el contador y el
+ * listado con el nuevo estado.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     /** Modelo simple de datos de una incidencia. */
     data class Incidencia(
+        val titulo: String,
         val descripcion: String,
         val prioridad: String,
         val marcaTiempo: String
@@ -43,39 +46,55 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Estado inicial del mensaje de retroalimentacion.
+        binding.txtMensaje.text = getString(R.string.mensaje_inicial)
+
         actualizarPantalla()
 
         binding.btnRegistrar.setOnClickListener { registrarIncidencia() }
         binding.btnLimpiar.setOnClickListener { limpiarRegistro() }
     }
 
-    /** Valida el formulario y agrega la incidencia a la lista. */
+    /** Valida el formulario, agrega la incidencia a la lista y actualiza el mensaje de estado. */
     private fun registrarIncidencia() {
+        val titulo = binding.edtTitulo.text?.toString()?.trim().orEmpty()
         val descripcion = binding.edtDescripcion.text?.toString()?.trim().orEmpty()
+
+        if (titulo.isEmpty()) {
+            binding.inputLayoutTitulo.error = getString(R.string.error_titulo_vacio)
+            return
+        }
+        binding.inputLayoutTitulo.error = null
 
         if (descripcion.isEmpty()) {
             binding.inputLayoutDescripcion.error = getString(R.string.error_vacio)
             return
         }
-
         binding.inputLayoutDescripcion.error = null
 
         val prioridad = binding.spPrioridad.selectedItem.toString()
         val marcaTiempo = formatoHora.format(Date())
 
-        incidencias.add(Incidencia(descripcion, prioridad, marcaTiempo))
+        incidencias.add(Incidencia(titulo, descripcion, prioridad, marcaTiempo))
 
+        // Retroalimentacion visible inmediata a partir del estado capturado.
+        binding.txtMensaje.text = getString(R.string.reporte_preparado, titulo)
+
+        binding.edtTitulo.setText("")
         binding.edtDescripcion.setText("")
         actualizarPantalla()
 
         Snackbar.make(binding.root, R.string.msg_registrada, Snackbar.LENGTH_SHORT).show()
     }
 
-    /** Borra todas las incidencias registradas y reinicia el contador. */
+    /** Borra todas las incidencias registradas y reinicia el contador y el mensaje. */
     private fun limpiarRegistro() {
         incidencias.clear()
+        binding.edtTitulo.setText("")
         binding.edtDescripcion.setText("")
+        binding.inputLayoutTitulo.error = null
         binding.inputLayoutDescripcion.error = null
+        binding.txtMensaje.text = getString(R.string.mensaje_inicial)
         actualizarPantalla()
 
         Snackbar.make(binding.root, R.string.msg_limpiado, Snackbar.LENGTH_SHORT).show()
@@ -94,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
         incidencias.forEachIndexed { indice, incidencia ->
             val inicio = texto.length
-            val etiqueta = "${indice + 1}. [${incidencia.prioridad}] "
+            val etiqueta = "${indice + 1}. [${incidencia.prioridad}] ${incidencia.titulo}\n"
             texto.append(etiqueta)
 
             texto.setSpan(
@@ -110,8 +129,8 @@ class MainActivity : AppCompatActivity() {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
-            texto.append(incidencia.descripcion)
-            texto.append("\n     Registrada: ${incidencia.marcaTiempo}\n\n")
+            texto.append("     ${incidencia.descripcion}\n")
+            texto.append("     Registrada: ${incidencia.marcaTiempo}\n\n")
         }
 
         binding.txtListado.text = texto

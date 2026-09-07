@@ -3,8 +3,9 @@
 
     <string name="titulo_app">Registro de Incidencias</string>
     <string name="subtitulo_app">Control interno de reportes tecnicos</string>
-    <string name="instruccion">Escribe una breve descripcion de la incidencia, elige su prioridad y pulsa REGISTRAR.</string>
+    <string name="instruccion">Escribe un título, una breve descripción de la incidencia, elige su prioridad y pulsa REGISTRAR.</string>
 
+    <string name="hint_titulo">Título de la incidencia</string>
     <string name="hint_descripcion">Descripcion de la incidencia</string>
     <string name="label_prioridad">Prioridad</string>
     <string name="btn_registrar">Registrar incidencia</string>
@@ -12,10 +13,13 @@
 
     <string name="contador_formato">Incidencias registradas: %1$d</string>
     <string name="sin_registros">Todavia no hay incidencias registradas.</string>
+    <string name="error_titulo_vacio">Escribe un título antes de crear el reporte.</string>
     <string name="error_vacio">Escribe una descripcion antes de registrar.</string>
     <string name="msg_registrada">Incidencia registrada correctamente</string>
     <string name="msg_limpiado">Registro vaciado</string>
     <string name="desc_icono">Icono de incidencia</string>
+    <string name="mensaje_inicial">Aún no hay reporte creado</string>
+    <string name="reporte_preparado">Reporte preparado: %1$s</string>
 
     <string-array name="prioridades">
         <item>Baja</item>
