@@ -89,7 +89,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Campo de estado 1: titulo de la incidencia -->
+                <!-- Campo de estado 1: titulo de la incidencia (teclado contextual: capitalizacion + accion IME "Siguiente") -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutTitulo"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -101,11 +101,12 @@
                         android:id="@+id/edtTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="textCapSentences"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Campo de estado 2: descripcion de la incidencia -->
+                <!-- Campo de estado 2: descripcion de la incidencia (teclado contextual: accion IME "Listo") -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutDescripcion"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -118,6 +119,7 @@
                         android:id="@+id/edtDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -131,12 +133,100 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/spPrioridad"
+                <!-- Interaccion tactil adicional: seleccion de prioridad mediante tarjetas clicables -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:entries="@array/prioridades" />
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPrioridadBaja"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="@color/blanco"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gris_texto"
+                        app:strokeWidth="1dp">
+
+                        <TextView
+                            android:id="@+id/txtCardBaja"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/prioridad_baja_label"
+                            android:textColor="@color/gris_texto"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPrioridadMedia"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="@color/blanco"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gris_texto"
+                        app:strokeWidth="1dp">
+
+                        <TextView
+                            android:id="@+id/txtCardMedia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/prioridad_media_label"
+                            android:textColor="@color/gris_texto"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPrioridadAlta"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="@color/blanco"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/gris_texto"
+                        app:strokeWidth="1dp">
+
+                        <TextView
+                            android:id="@+id/txtCardAlta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/prioridad_alta_label"
+                            android:textColor="@color/gris_texto"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- Retroalimentacion visible de la interaccion tactil -->
+                <TextView
+                    android:id="@+id/txtPrioridadSeleccionada"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/gris_texto"
+                    android:textSize="13sp"
+                    android:textStyle="italic"
+                    tools:text="Ningún nivel de prioridad seleccionado aún." />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRegistrar"
@@ -159,7 +249,7 @@
                     app:cornerRadius="12dp"
                     app:strokeColor="@color/azul_primario" />
 
-                <!-- Retroalimentacion inmediata (estado basico) -->
+                <!-- Retroalimentacion inmediata del registro (estado basico) -->
                 <TextView
                     android:id="@+id/txtMensaje"
                     android:layout_width="match_parent"

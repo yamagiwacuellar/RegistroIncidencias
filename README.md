@@ -1,6 +1,6 @@
 # Registro de Incidencias
 
-Aplicación Android nativa (Kotlin) para registrar incidencias técnicas de forma sencilla: título, descripción, prioridad (Baja/Media/Alta) y marca de tiempo, con retroalimentación inmediata, contador y listado en memoria durante la sesión.
+Aplicación Android nativa (Kotlin) para registrar incidencias técnicas de forma sencilla: título, descripción, prioridad (Baja/Media/Alta) elegida por interacción táctil, teclado contextual, retroalimentación inmediata, contador y listado en memoria durante la sesión.
 
 ## Stack técnico
 
@@ -48,3 +48,9 @@ app/
 - Ambos campos se validan de forma independiente antes de registrar (título vacío y descripción vacía muestran su propio error).
 - Se agregó un mensaje de retroalimentación inmediata (`txtMensaje`) que arranca en *"Aún no hay reporte creado"* y cambia a *"Reporte preparado: `<título>`"* apenas se presiona **Registrar incidencia**, usando variables de estado en Kotlin (`titulo`, `descripcion`) que se leen del `ViewBinding` y se reflejan al instante en la vista — el equivalente, en un proyecto basado en Vistas XML, a `remember { mutableStateOf(...) }` en Compose.
 - El listado y el contador (funcionalidad ya existente) ahora muestran también el título de cada incidencia registrada.
+
+### Semana 10 — Teclado contextual e interacción táctil
+
+- El campo de título usa `imeOptions="actionNext"` para avanzar al campo de descripción, y el de descripción usa `imeOptions="actionDone"`, el cual dispara el registro directamente desde el teclado (`setOnEditorActionListener`).
+- Se reemplazó el `Spinner` de prioridad por tres tarjetas (`MaterialCardView`) clicables — Baja / Media / Alta — como interacción táctil adicional a la acción principal, usando `setOnClickListener` (sin gestos personalizados).
+- La tarjeta seleccionada se resalta con el color de la prioridad y un texto de retroalimentación (`txtPrioridadSeleccionada`) confirma la elección en tiempo real; si se intenta registrar sin elegir prioridad, se muestra un mensaje de error en el mismo lugar.

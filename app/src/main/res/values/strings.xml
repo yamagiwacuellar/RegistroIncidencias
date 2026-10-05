@@ -3,7 +3,7 @@
 
     <string name="titulo_app">Registro de Incidencias</string>
     <string name="subtitulo_app">Control interno de reportes tecnicos</string>
-    <string name="instruccion">Escribe un título, una breve descripción de la incidencia, elige su prioridad y pulsa REGISTRAR.</string>
+    <string name="instruccion">Escribe un título, una breve descripción de la incidencia, toca el nivel de prioridad y pulsa REGISTRAR.</string>
 
     <string name="hint_titulo">Título de la incidencia</string>
     <string name="hint_descripcion">Descripcion de la incidencia</string>
@@ -21,9 +21,10 @@
     <string name="mensaje_inicial">Aún no hay reporte creado</string>
     <string name="reporte_preparado">Reporte preparado: %1$s</string>
 
-    <string-array name="prioridades">
-        <item>Baja</item>
-        <item>Media</item>
-        <item>Alta</item>
-    </string-array>
+    <string name="prioridad_baja_label">Baja</string>
+    <string name="prioridad_media_label">Media</string>
+    <string name="prioridad_alta_label">Alta</string>
+    <string name="prioridad_no_seleccionada">Ningún nivel de prioridad seleccionado aún.</string>
+    <string name="prioridad_seleccionada_formato">Prioridad seleccionada: %1$s</string>
+    <string name="error_prioridad">Selecciona una prioridad antes de registrar.</string>
 </resources>
