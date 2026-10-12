@@ -1,5 +1,10 @@
 package com.example.registroincidencias
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -15,6 +20,8 @@ import com.example.registroincidencias.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Pantalla principal de la aplicacion "Registro de Incidencias".
@@ -27,7 +34,7 @@ import java.util.Locale
  * retroalimentacion ("Reporte preparado: <titulo>"), ademas de actualizar
  * el contador y el listado con el nuevo estado.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -36,6 +43,10 @@ class MainActivity : AppCompatActivity() {
 
     /** Formato de hora usado para marcar cada incidencia. */
     private val formatoHora = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+
+    /** Gestor de sensores del sistema y acelerometro por defecto (null si el dispositivo no lo tiene). */
+    private var sensorManager: SensorManager? = null
+    private var acelerometro: Sensor? = null
 
     /** Prioridad elegida mediante la interaccion tactil (tarjetas), o null si aun no se elige. */
     private var prioridadSeleccionada: String? = null
@@ -52,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        inicializarSensor()
 
         // Estado inicial del mensaje de retroalimentacion.
         binding.txtMensaje.text = getString(R.string.mensaje_inicial)
@@ -215,5 +228,69 @@ class MainActivity : AppCompatActivity() {
             else -> R.color.prioridad_baja
         }
         return ContextCompat.getColor(this, recurso)
+    }
+
+    // ------------------------------------------------------------------
+    // Acelerometro (SensorManager + SensorEventListener)
+    // ------------------------------------------------------------------
+
+    /** Obtiene el acelerometro y muestra su disponibilidad; si no existe, informa la limitacion. */
+    private fun inicializarSensor() {
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        acelerometro = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        if (acelerometro == null) {
+            binding.txtSensorEstado.text = getString(R.string.sensor_no_disponible)
+            binding.txtSensorValores.text = ""
+            binding.txtSensorMensaje.text = ""
+        } else {
+            binding.txtSensorEstado.text = getString(R.string.sensor_disponible)
+            binding.txtSensorValores.text = getString(R.string.sensor_esperando)
+            binding.txtSensorMensaje.text = ""
+        }
+    }
+
+    /** Registra el listener solo mientras la pantalla esta visible. */
+    override fun onResume() {
+        super.onResume()
+        acelerometro?.let {
+            sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
+
+    /** Libera el sensor al salir de la pantalla para no gastar bateria. */
+    override fun onPause() {
+        super.onPause()
+        sensorManager?.unregisterListener(this)
+    }
+
+    /** Recibe cada lectura (x, y, z en m/s2) y la traduce a un mensaje simple. */
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type != Sensor.TYPE_ACCELEROMETER) return
+
+        val x = event.values[0]
+        val y = event.values[1]
+        val z = event.values[2]
+
+        binding.txtSensorValores.text = getString(R.string.sensor_valores_formato, x, y, z)
+
+        // En reposo la magnitud ronda la gravedad (~9.81 m/s2); la desviacion indica movimiento.
+        val magnitud = sqrt(x * x + y * y + z * z)
+        val desviacion = abs(magnitud - SensorManager.GRAVITY_EARTH)
+
+        binding.txtSensorMensaje.text = when {
+            desviacion > UMBRAL_MOVIMIENTO_FUERTE -> getString(R.string.sensor_msg_fuerte)
+            desviacion > UMBRAL_MOVIMIENTO_MODERADO -> getString(R.string.sensor_msg_moderado)
+            else -> getString(R.string.sensor_msg_estable)
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // No se requiere manejar cambios de precision en esta primera integracion.
+    }
+
+    private companion object {
+        const val UMBRAL_MOVIMIENTO_MODERADO = 1.5f
+        const val UMBRAL_MOVIMIENTO_FUERTE = 6.0f
     }
 }
