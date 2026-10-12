@@ -27,4 +27,13 @@
     <string name="prioridad_no_seleccionada">Ningún nivel de prioridad seleccionado aún.</string>
     <string name="prioridad_seleccionada_formato">Prioridad seleccionada: %1$s</string>
     <string name="error_prioridad">Selecciona una prioridad antes de registrar.</string>
+
+    <string name="sensor_titulo">Sensor de movimiento (acelerómetro)</string>
+    <string name="sensor_disponible">Acelerómetro disponible · leyendo en tiempo real</string>
+    <string name="sensor_no_disponible">Este dispositivo no tiene acelerómetro disponible, por lo que no se puede mostrar la lectura de movimiento.</string>
+    <string name="sensor_esperando">Esperando lectura…</string>
+    <string name="sensor_valores_formato">X: %1$.2f   Y: %2$.2f   Z: %3$.2f  (m/s²)</string>
+    <string name="sensor_msg_estable">Dispositivo estable</string>
+    <string name="sensor_msg_moderado">Movimiento moderado</string>
+    <string name="sensor_msg_fuerte">Movimiento fuerte detectado</string>
 </resources>

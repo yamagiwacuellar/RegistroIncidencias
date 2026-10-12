@@ -54,3 +54,13 @@ app/
 - El campo de título usa `imeOptions="actionNext"` para avanzar al campo de descripción, y el de descripción usa `imeOptions="actionDone"`, el cual dispara el registro directamente desde el teclado (`setOnEditorActionListener`).
 - Se reemplazó el `Spinner` de prioridad por tres tarjetas (`MaterialCardView`) clicables — Baja / Media / Alta — como interacción táctil adicional a la acción principal, usando `setOnClickListener` (sin gestos personalizados).
 - La tarjeta seleccionada se resalta con el color de la prioridad y un texto de retroalimentación (`txtPrioridadSeleccionada`) confirma la elección en tiempo real; si se intenta registrar sin elegir prioridad, se muestra un mensaje de error en el mismo lugar.
+
+### Semana 11 — Lectura inicial del acelerómetro
+
+- **Sensor probado:** acelerómetro (`Sensor.TYPE_ACCELEROMETER`), consumido con `SensorManager` y un `SensorEventListener` implementado en `MainActivity`.
+- La tarjeta *"Sensor de movimiento"* muestra el estado del sensor, los valores X, Y, Z en m/s² y un mensaje interpretativo simple (*Dispositivo estable*, *Movimiento moderado* o *Movimiento fuerte detectado*), calculado a partir de la desviación de la magnitud respecto a la gravedad (≈ 9.81 m/s²).
+- El listener se registra en `onResume()` y se libera en `onPause()` para no consumir batería con la pantalla fuera de vista.
+- **Caso no disponible:** si el dispositivo no tiene acelerómetro, la app muestra un mensaje claro en lugar de la lectura.
+- **Cómo se verificó:** ejecución en emulador de Android Studio usando *Extended controls → Virtual sensors* (Accelerometer) para variar X/Y/Z y observar el cambio de valores y mensaje; en dispositivo físico, moviendo el teléfono de forma moderada.
+- **Limitaciones:** umbrales fijos y sin filtrado de ruido; es una integración inicial, no una app completa de sensores.
+
