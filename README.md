@@ -64,3 +64,11 @@ app/
 - **Cómo se verificó:** ejecución en emulador de Android Studio usando *Extended controls → Virtual sensors* (Accelerometer) para variar X/Y/Z y observar el cambio de valores y mensaje; en dispositivo físico, moviendo el teléfono de forma moderada.
 - **Limitaciones:** umbrales fijos y sin filtrado de ruido; es una integración inicial, no una app completa de sensores.
 
+### Semana 12 — Tablero de diagnóstico del dispositivo
+
+- La sección del sensor se amplió a **"Diagnóstico del dispositivo"**, que reporta tres recursos: **acelerómetro** (`TYPE_ACCELEROMETER`), **luz ambiental** (`TYPE_LIGHT`) y **proximidad** (`TYPE_PROXIMITY`).
+- Cada recurso sigue el mismo flujo: se comprueba su disponibilidad con `getDefaultSensor()`, se muestra el valor crudo y se acompaña de una interpretación en lenguaje natural (*Movimiento fuerte detectado*, *Ambiente oscuro*, *Objeto cerca de la pantalla*, etc.) en lugar de números sin contexto.
+- Si un sensor no existe en el dispositivo, su bloque muestra un mensaje explicando la limitación en vez de quedar vacío.
+- **Control del ciclo:** los listeners se registran en `onResume()` y se liberan todos con `unregisterListener()` en `onPause()`, de modo que la app no escucha sensores con la pantalla fuera de vista.
+- **Limitación del emulador:** los valores de acelerómetro y luz se simulan desde *Extended controls → Virtual sensors*; el sensor de proximidad suele reportar solo dos estados (cerca/lejos) y en emulador puede no estar presente, en cuyo caso se muestra el mensaje de no disponible.
+

@@ -263,7 +263,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Sensor de movimiento (acelerometro): lectura inicial -->
+        <!-- Diagnostico del dispositivo: disponibilidad, lectura e interpretacion de recursos -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -283,39 +283,133 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/diagnostico_titulo"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/diagnostico_subtitulo"
+                    android:textColor="@color/gris_texto"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
                     android:text="@string/sensor_titulo"
                     android:textColor="@color/azul_primario"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtSensorEstado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="4dp"
                     android:textColor="@color/gris_texto"
-                    android:textSize="13sp"
-                    tools:text="Acelerómetro disponible" />
+                    android:textSize="12sp"
+                    tools:text="Disponible · leyendo en tiempo real" />
 
                 <TextView
                     android:id="@+id/txtSensorValores"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="monospace"
                     android:textColor="@color/azul_oscuro"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     tools:text="X: 0.12   Y: 9.78   Z: 0.30  (m/s²)" />
 
                 <TextView
                     android:id="@+id/txtSensorMensaje"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="2dp"
                     android:textColor="@color/azul_oscuro"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     tools:text="Dispositivo estable" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/luz_titulo"
+                    android:textColor="@color/azul_primario"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtLuzEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/gris_texto"
+                    android:textSize="12sp"
+                    tools:text="Disponible · leyendo en tiempo real" />
+
+                <TextView
+                    android:id="@+id/txtLuzValores"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="13sp"
+                    tools:text="120.00 lx" />
+
+                <TextView
+                    android:id="@+id/txtLuzMensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Ambiente con luz moderada" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/proximidad_titulo"
+                    android:textColor="@color/azul_primario"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtProximidadEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/gris_texto"
+                    android:textSize="12sp"
+                    tools:text="Disponible · leyendo en tiempo real" />
+
+                <TextView
+                    android:id="@+id/txtProximidadValores"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="13sp"
+                    tools:text="5.00 cm" />
+
+                <TextView
+                    android:id="@+id/txtProximidadMensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/azul_oscuro"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Sin objeto cerca" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     /** Gestor de sensores del sistema y acelerometro por defecto (null si el dispositivo no lo tiene). */
     private var sensorManager: SensorManager? = null
     private var acelerometro: Sensor? = null
+    private var sensorLuz: Sensor? = null
+    private var sensorProximidad: Sensor? = null
 
     /** Prioridad elegida mediante la interaccion tactil (tarjetas), o null si aun no se elige. */
     private var prioridadSeleccionada: String? = null
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        inicializarSensor()
+        inicializarSensores()
 
         // Estado inicial del mensaje de retroalimentacion.
         binding.txtMensaje.text = getString(R.string.mensaje_inicial)
@@ -231,13 +233,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     // ------------------------------------------------------------------
-    // Acelerometro (SensorManager + SensorEventListener)
+    // Diagnostico del dispositivo (SensorManager + SensorEventListener)
     // ------------------------------------------------------------------
 
-    /** Obtiene el acelerometro y muestra su disponibilidad; si no existe, informa la limitacion. */
-    private fun inicializarSensor() {
+    /**
+     * Comprueba la disponibilidad de cada recurso y deja la seccion de
+     * diagnostico en su estado inicial. Si un sensor no existe en el
+     * dispositivo, se informa la limitacion en lugar de dejar el espacio vacio.
+     */
+    private fun inicializarSensores() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         acelerometro = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorLuz = sensorManager?.getDefaultSensor(Sensor.TYPE_LIGHT)
+        sensorProximidad = sensorManager?.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
         if (acelerometro == null) {
             binding.txtSensorEstado.text = getString(R.string.sensor_no_disponible)
@@ -248,26 +256,53 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             binding.txtSensorValores.text = getString(R.string.sensor_esperando)
             binding.txtSensorMensaje.text = ""
         }
-    }
 
-    /** Registra el listener solo mientras la pantalla esta visible. */
-    override fun onResume() {
-        super.onResume()
-        acelerometro?.let {
-            sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        if (sensorLuz == null) {
+            binding.txtLuzEstado.text = getString(R.string.luz_no_disponible)
+            binding.txtLuzValores.text = ""
+            binding.txtLuzMensaje.text = ""
+        } else {
+            binding.txtLuzEstado.text = getString(R.string.luz_disponible)
+            binding.txtLuzValores.text = getString(R.string.sensor_esperando)
+            binding.txtLuzMensaje.text = ""
+        }
+
+        if (sensorProximidad == null) {
+            binding.txtProximidadEstado.text = getString(R.string.proximidad_no_disponible)
+            binding.txtProximidadValores.text = ""
+            binding.txtProximidadMensaje.text = ""
+        } else {
+            binding.txtProximidadEstado.text = getString(R.string.proximidad_disponible)
+            binding.txtProximidadValores.text = getString(R.string.sensor_esperando)
+            binding.txtProximidadMensaje.text = ""
         }
     }
 
-    /** Libera el sensor al salir de la pantalla para no gastar bateria. */
+    /** Registra los listeners solo mientras la pantalla esta visible. */
+    override fun onResume() {
+        super.onResume()
+        listOfNotNull(acelerometro, sensorLuz, sensorProximidad).forEach { sensor ->
+            sensorManager?.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
+
+    /** Libera todos los recursos al salir de la pantalla para no gastar bateria. */
     override fun onPause() {
         super.onPause()
         sensorManager?.unregisterListener(this)
     }
 
-    /** Recibe cada lectura (x, y, z en m/s2) y la traduce a un mensaje simple. */
+    /** Recibe cada lectura y la traduce a valores + interpretacion legible. */
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.type != Sensor.TYPE_ACCELEROMETER) return
+        when (event.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> mostrarMovimiento(event)
+            Sensor.TYPE_LIGHT -> mostrarLuz(event)
+            Sensor.TYPE_PROXIMITY -> mostrarProximidad(event)
+        }
+    }
 
+    /** Acelerometro: valores X/Y/Z en m/s2 e interpretacion del movimiento. */
+    private fun mostrarMovimiento(event: SensorEvent) {
         val x = event.values[0]
         val y = event.values[1]
         val z = event.values[2]
@@ -285,12 +320,42 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    /** Sensor de luz: lectura en lux e interpretacion del ambiente. */
+    private fun mostrarLuz(event: SensorEvent) {
+        val lux = event.values[0]
+
+        binding.txtLuzValores.text = getString(R.string.luz_valores_formato, lux)
+        binding.txtLuzMensaje.text = when {
+            lux < UMBRAL_LUZ_OSCURO -> getString(R.string.luz_msg_oscuro)
+            lux < UMBRAL_LUZ_BRILLANTE -> getString(R.string.luz_msg_moderado)
+            else -> getString(R.string.luz_msg_brillante)
+        }
+    }
+
+    /**
+     * Proximidad: la mayoria de dispositivos reporta solo dos estados
+     * (cerca / lejos), por lo que se compara contra el rango maximo del sensor.
+     */
+    private fun mostrarProximidad(event: SensorEvent) {
+        val distancia = event.values[0]
+        val rangoMaximo = sensorProximidad?.maximumRange ?: distancia
+
+        binding.txtProximidadValores.text = getString(R.string.proximidad_valores_formato, distancia)
+        binding.txtProximidadMensaje.text = if (distancia < rangoMaximo) {
+            getString(R.string.proximidad_msg_cerca)
+        } else {
+            getString(R.string.proximidad_msg_lejos)
+        }
+    }
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // No se requiere manejar cambios de precision en esta primera integracion.
+        // No se requiere manejar cambios de precision en esta integracion.
     }
 
     private companion object {
         const val UMBRAL_MOVIMIENTO_MODERADO = 1.5f
         const val UMBRAL_MOVIMIENTO_FUERTE = 6.0f
+        const val UMBRAL_LUZ_OSCURO = 10f
+        const val UMBRAL_LUZ_BRILLANTE = 2000f
     }
 }

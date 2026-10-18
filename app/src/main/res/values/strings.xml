@@ -28,7 +28,10 @@
     <string name="prioridad_seleccionada_formato">Prioridad seleccionada: %1$s</string>
     <string name="error_prioridad">Selecciona una prioridad antes de registrar.</string>
 
-    <string name="sensor_titulo">Sensor de movimiento (acelerómetro)</string>
+    <string name="diagnostico_titulo">Diagnóstico del dispositivo</string>
+    <string name="diagnostico_subtitulo">Estado y lectura de los recursos de entrada disponibles.</string>
+
+    <string name="sensor_titulo">Movimiento (acelerómetro)</string>
     <string name="sensor_disponible">Acelerómetro disponible · leyendo en tiempo real</string>
     <string name="sensor_no_disponible">Este dispositivo no tiene acelerómetro disponible, por lo que no se puede mostrar la lectura de movimiento.</string>
     <string name="sensor_esperando">Esperando lectura…</string>
@@ -36,4 +39,19 @@
     <string name="sensor_msg_estable">Dispositivo estable</string>
     <string name="sensor_msg_moderado">Movimiento moderado</string>
     <string name="sensor_msg_fuerte">Movimiento fuerte detectado</string>
+
+    <string name="luz_titulo">Luz ambiental</string>
+    <string name="luz_disponible">Disponible · leyendo en tiempo real</string>
+    <string name="luz_no_disponible">Este dispositivo no reporta sensor de luz, por lo que no hay lectura disponible.</string>
+    <string name="luz_valores_formato">%1$.2f lx</string>
+    <string name="luz_msg_oscuro">Ambiente oscuro</string>
+    <string name="luz_msg_moderado">Ambiente con luz moderada</string>
+    <string name="luz_msg_brillante">Ambiente con mucha luz</string>
+
+    <string name="proximidad_titulo">Proximidad</string>
+    <string name="proximidad_disponible">Disponible · leyendo en tiempo real</string>
+    <string name="proximidad_no_disponible">Este dispositivo no reporta sensor de proximidad, por lo que no hay lectura disponible.</string>
+    <string name="proximidad_valores_formato">%1$.2f cm</string>
+    <string name="proximidad_msg_cerca">Objeto cerca de la pantalla</string>
+    <string name="proximidad_msg_lejos">Sin objeto cerca</string>
 </resources>
