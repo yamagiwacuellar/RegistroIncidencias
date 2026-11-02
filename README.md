@@ -72,3 +72,10 @@ app/
 - **Control del ciclo:** los listeners se registran en `onResume()` y se liberan todos con `unregisterListener()` en `onPause()`, de modo que la app no escucha sensores con la pantalla fuera de vista.
 - **Limitación del emulador:** los valores de acelerómetro y luz se simulan desde *Extended controls → Virtual sensors*; el sensor de proximidad suele reportar solo dos estados (cerca/lejos) y en emulador puede no estar presente, en cuyo caso se muestra el mensaje de no disponible.
 
+### Semana 14 — Bitácora del ciclo de vida
+
+- `MainActivity` quedó instrumentada con `Log.d` en `onCreate`, `onStart`, `onResume`, `onPause`, `onStop`, `onDestroy` y además `onRestart`, que es el que aparece al volver desde segundo plano.
+- Todos los mensajes usan la etiqueta **`TPIS1_LIFECYCLE`**, para filtrarlos en Logcat.
+- Convención usada: en los callbacks de entrada (`onCreate`, `onRestart`, `onStart`, `onResume`) se registra **después** de `super`; en los de salida (`onPause`, `onStop`, `onDestroy`) se registra **antes** de `super`, de modo que el orden impreso refleje el orden real de la transición.
+- Los callbacks de sensores (registro en `onResume`, liberación en `onPause`) se mantienen intactos: la instrumentación no cambia el comportamiento del proyecto.
+

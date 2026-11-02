@@ -11,6 +11,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.graphics.Typeface
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG_CICLO_VIDA, "onCreate")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -281,6 +283,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     /** Registra los listeners solo mientras la pantalla esta visible. */
     override fun onResume() {
         super.onResume()
+        Log.d(TAG_CICLO_VIDA, "onResume")
         listOfNotNull(acelerometro, sensorLuz, sensorProximidad).forEach { sensor ->
             sensorManager?.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
         }
@@ -288,8 +291,33 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     /** Libera todos los recursos al salir de la pantalla para no gastar bateria. */
     override fun onPause() {
+        Log.d(TAG_CICLO_VIDA, "onPause")
         super.onPause()
         sensorManager?.unregisterListener(this)
+    }
+
+    /** La Activity vuelve a ser visible; precede a onStart al regresar desde segundo plano. */
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TAG_CICLO_VIDA, "onRestart")
+    }
+
+    /** La Activity pasa a ser visible para el usuario. */
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG_CICLO_VIDA, "onStart")
+    }
+
+    /** La Activity deja de ser visible (por ejemplo, al presionar Home). */
+    override fun onStop() {
+        Log.d(TAG_CICLO_VIDA, "onStop")
+        super.onStop()
+    }
+
+    /** La Activity va a ser destruida (Back, rotacion o decision del sistema). */
+    override fun onDestroy() {
+        Log.d(TAG_CICLO_VIDA, "onDestroy")
+        super.onDestroy()
     }
 
     /** Recibe cada lectura y la traduce a valores + interpretacion legible. */
@@ -353,6 +381,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     private companion object {
+        /** Etiqueta usada para filtrar el ciclo de vida en Logcat. */
+        const val TAG_CICLO_VIDA = "TPIS1_LIFECYCLE"
+
         const val UMBRAL_MOVIMIENTO_MODERADO = 1.5f
         const val UMBRAL_MOVIMIENTO_FUERTE = 6.0f
         const val UMBRAL_LUZ_OSCURO = 10f
